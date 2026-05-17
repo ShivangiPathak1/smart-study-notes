@@ -44,31 +44,32 @@ export function QuizView({ questions }: { questions: QuizQuestion[] }) {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between rounded-2xl border border-primary/30 bg-primary/5 p-6"
+          className="flex items-center justify-between overflow-hidden rounded-2xl bg-gradient-hero p-6 text-white shadow-glow"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
               <Trophy className="h-6 w-6" />
             </div>
             <div>
               <div className="text-2xl font-bold">
                 {score} / {questions.length}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-white/80">
                 {Math.round((score / questions.length) * 100)}% correct
               </div>
             </div>
           </div>
-          <Button onClick={reset} variant="outline">
+          <Button onClick={reset} variant="secondary">
             <RotateCcw className="mr-2 h-4 w-4" /> Try again
           </Button>
         </motion.div>
       )}
 
       {questions.map((q, qi) => (
-        <Card key={qi} className="p-6">
+        <Card key={qi} className="relative overflow-hidden p-6">
+          <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-hero" />
           <div className="mb-4 flex items-start gap-3">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-hero text-sm font-bold text-white shadow-md">
               {qi + 1}
             </span>
             <h3 className="text-base font-medium leading-relaxed">{q.question}</h3>
@@ -112,7 +113,7 @@ export function QuizView({ questions }: { questions: QuizQuestion[] }) {
       {!submitted && (
         <Button
           size="lg"
-          className="w-full"
+          className="w-full bg-gradient-hero text-white shadow-glow hover:opacity-95"
           disabled={!allAnswered}
           onClick={() => setSubmitted(true)}
         >

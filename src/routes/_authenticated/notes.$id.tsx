@@ -104,10 +104,11 @@ function NoteDetail() {
         </Button>
       </Link>
 
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="relative mt-2 flex flex-wrap items-start justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-hero opacity-20 blur-3xl" />
         <div>
           <div className="flex items-center gap-2">
-            <Badge variant="secondary">{note.subject || "General"}</Badge>
+            <Badge className="border-0 bg-gradient-hero text-white">{note.subject || "General"}</Badge>
             {processing && (
               <Badge variant="outline" className="gap-1 border-amber-500/40 text-amber-600">
                 <Loader2 className="h-3 w-3 animate-spin" /> Processing
@@ -115,7 +116,9 @@ function NoteDetail() {
             )}
             {failed && <Badge variant="destructive">Failed</Badge>}
           </div>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">{note.title}</h1>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">
+            <span className="text-gradient-hero">{note.title}</span>
+          </h1>
         </div>
         <Button variant="outline" size="sm" onClick={handleDelete}>
           <Trash2 className="mr-2 h-4 w-4" /> Delete
@@ -145,7 +148,7 @@ function NoteDetail() {
 
       {!processing && !failed && (
         <Tabs defaultValue="clean" className="mt-6">
-          <TabsList className="flex flex-wrap">
+          <TabsList className="flex flex-wrap bg-muted/60 p-1">
             <TabsTrigger value="clean">Clean notes</TabsTrigger>
             <TabsTrigger value="summary">Summary</TabsTrigger>
             <TabsTrigger value="flashcards">Flashcards</TabsTrigger>
@@ -159,7 +162,7 @@ function NoteDetail() {
                 onCopy={() => copy(note.clean_notes || "")}
                 onDownload={() => download(note.clean_notes || "", `${note.title}.md`)}
               />
-              <article className="prose prose-sm sm:prose-base dark:prose-invert mt-4 max-w-none">
+              <article className="prose-notes mt-4 max-w-none">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {note.clean_notes || "*No content*"}
                 </ReactMarkdown>
@@ -168,12 +171,13 @@ function NoteDetail() {
           </TabsContent>
 
           <TabsContent value="summary" className="mt-4">
-            <Card className="p-6">
+            <Card className="relative overflow-hidden p-6">
+              <div aria-hidden className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-gradient-warm opacity-15 blur-3xl" />
               <ActionsBar
                 onCopy={() => copy(note.summary || "")}
                 onDownload={() => download(note.summary || "", `${note.title}-summary.md`)}
               />
-              <article className="prose prose-sm sm:prose-base dark:prose-invert mt-4 max-w-none">
+              <article className="prose-notes mt-4 max-w-none">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {note.summary || "*No summary*"}
                 </ReactMarkdown>
