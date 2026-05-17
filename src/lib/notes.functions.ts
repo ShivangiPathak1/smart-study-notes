@@ -105,8 +105,8 @@ const AiOutputSchema = z.object({
         answer: z.string(),
       }),
     )
-    .min(5)
-    .max(12),
+    .max(12)
+    .default([]),
   quiz: z
     .array(
       z.object({
@@ -116,8 +116,8 @@ const AiOutputSchema = z.object({
         explanation: z.string().optional(),
       }),
     )
-    .min(5)
-    .max(10),
+    .max(10)
+    .default([]),
 });
 
 export const processNote = createServerFn({ method: "POST" })
