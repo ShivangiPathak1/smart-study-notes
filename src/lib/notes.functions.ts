@@ -91,13 +91,11 @@ export const createNoteFromUpload = createServerFn({ method: "POST" })
 /* -------------- AI Processing -------------- */
 
 const AiOutputSchema = z.object({
-  title: z.string().describe("Short descriptive title for the notes"),
-  subject: z.string().describe("Subject/topic area, 1-3 words"),
-  originalText: z.string().describe("Raw OCR'd text from the document, verbatim"),
-  cleanNotes: z
-    .string()
-    .describe("Well-structured markdown notes with headings and bullet points"),
-  summary: z.string().describe("Concise revision summary"),
+  title: z.string().default("Untitled Notes"),
+  subject: z.string().default("General"),
+  originalText: z.string().default(""),
+  cleanNotes: z.string().default(""),
+  summary: z.string().default(""),
   flashcards: z
     .array(
       z.object({
@@ -111,8 +109,8 @@ const AiOutputSchema = z.object({
     .array(
       z.object({
         question: z.string(),
-        choices: z.array(z.string()).length(4),
-        correctIndex: z.number().int().min(0).max(3),
+        choices: z.array(z.string()).min(2).max(6),
+        correctIndex: z.number().int().min(0).max(5),
         explanation: z.string().optional(),
       }),
     )
