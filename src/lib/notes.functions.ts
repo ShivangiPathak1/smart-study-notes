@@ -162,8 +162,16 @@ export const processNote = createServerFn({ method: "POST" })
 
 Rules:
 - OCR carefully; preserve every legible word in originalText.
-- cleanNotes must be valid markdown with # / ## headings, bullet points, bold key terms.
-- summary should be 3-6 short paragraphs of exam-revision notes.
+- cleanNotes MUST be richly structured GitHub-Flavored Markdown with CLEAR LOGICAL SECTIONS. Required structure:
+    1. Start with a single "# <Topic Title>" H1.
+    2. Then a short "> **Overview:** ..." blockquote (2–3 sentences).
+    3. Then a "## Key Concepts" section as a bullet list of **bold term** — definition.
+    4. Then 2–5 "## <Section Name>" H2 sections grouped by logical theme (one per major idea / sub-topic) — inside each, use "### Sub-heading" where helpful, bullet lists, numbered steps for processes, and **bold** for key terms.
+    5. Where useful, include a markdown table (e.g. comparisons, properties, formulas) and/or fenced code blocks for equations or code.
+    6. Use "> **Example:** ..." or "> **Note:** ..." blockquote callouts for examples, warnings, and tips.
+    7. Separate top-level "##" sections with a "---" horizontal rule.
+    8. End with a "## Takeaways" section of 3–6 concise bullet points.
+- summary: 3–6 short paragraphs of exam-revision notes, plain prose (no headings).
 - Generate 6-10 flashcards covering the most important concepts.
 - Generate 5-8 multiple-choice quiz questions with exactly 4 choices each; correctIndex is 0-based.
 - title: short and descriptive. subject: 1-3 words (e.g. "Biology", "Linear Algebra").
