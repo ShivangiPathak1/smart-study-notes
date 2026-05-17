@@ -20,6 +20,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { listNotes } from "@/lib/notes.functions";
 import { formatDistanceToNow } from "date-fns";
 
+const GRADIENTS = [
+  "bg-gradient-hero",
+  "bg-gradient-cool",
+  "bg-gradient-primary",
+  "bg-gradient-fresh",
+  "bg-gradient-warm",
+];
+function gradientFor(key: string) {
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  return GRADIENTS[h % GRADIENTS.length];
+}
+
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
 });
@@ -59,26 +72,29 @@ function DashboardPage() {
     <main className="container mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Your study library</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Your <span className="text-gradient-hero">study library</span>
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Every note you've scanned, ready to revise.
           </p>
         </div>
         <Link to="/upload">
-          <Button size="lg">
+          <Button size="lg" className="bg-gradient-hero text-white shadow-glow transition-transform hover:scale-105">
             <Plus className="mr-2 h-4 w-4" /> New upload
           </Button>
         </Link>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <StatCard icon={FileText} label="Total notes" value={notes?.length ?? 0} loading={isLoading} />
-        <StatCard icon={Folder} label="Subjects" value={subjects} loading={isLoading} />
+        <StatCard icon={FileText} label="Total notes" value={notes?.length ?? 0} loading={isLoading} gradient="bg-gradient-cool" />
+        <StatCard icon={Folder} label="Subjects" value={subjects} loading={isLoading} gradient="bg-gradient-fresh" />
         <StatCard
           icon={Sparkles}
           label="Processing"
           value={notes?.filter((n) => n.status === "processing").length ?? 0}
           loading={isLoading}
+          gradient="bg-gradient-warm"
         />
       </div>
 
@@ -117,9 +133,11 @@ function DashboardPage() {
                   params={{ id: n.id }}
                   className="group block"
                 >
-                  <Card className="h-full p-5 transition-all hover:-translate-y-0.5 hover:shadow-md">
+                  <Card className="relative h-full overflow-hidden p-5 transition-all hover:-translate-y-1 hover:shadow-glow">
+                    <div className={`absolute inset-x-0 top-0 h-1.5 ${gradientFor(n.subject || n.id)}`} />
+                    <div className={`absolute -right-12 -top-12 h-32 w-32 rounded-full opacity-15 blur-2xl ${gradientFor(n.subject || n.id)}`} />
                     <div className="flex items-start justify-between gap-2">
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge className={`border-0 text-white text-xs ${gradientFor(n.subject || n.id)}`}>
                         {n.subject || "General"}
                       </Badge>
                       <StatusBadge status={n.status} />
@@ -149,16 +167,19 @@ function StatCard({
   label,
   value,
   loading,
+  gradient = "bg-gradient-hero",
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: number;
   loading: boolean;
+  gradient?: string;
 }) {
   return (
-    <Card className="p-5">
+    <Card className="relative overflow-hidden p-5 transition-transform hover:-translate-y-0.5">
+      <div className={`absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-20 blur-2xl ${gradient}`} />
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-md ${gradient}`}>
           <Icon className="h-5 w-5" />
         </div>
         <div>

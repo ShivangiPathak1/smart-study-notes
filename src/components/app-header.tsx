@@ -36,10 +36,10 @@ export function AppHeader() {
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-hero text-white shadow-glow">
             <BookOpen className="h-5 w-5" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">NoteMe</span>
+          <span className="text-lg font-bold tracking-tight text-gradient-hero">NoteMe</span>
         </Link>
 
         <div className="flex items-center gap-2">
