@@ -149,35 +149,67 @@ export const processNote = createServerFn({ method: "POST" })
 
       const prompt = `You are an expert academic note-processing assistant. Analyze the attached ${
         isPdf ? "PDF document" : "image of student notes (handwritten, whiteboard, or screenshot)"
-      } and produce structured study material.
+      } and return ONLY a JSON object (no prose, no markdown fences) with this exact shape:
+{
+  "title": string,
+  "subject": string,
+  "originalText": string,
+  "cleanNotes": string,
+  "summary": string,
+  "flashcards": [{ "question": string, "answer": string }],
+  "quiz": [{ "question": string, "choices": [string, string, string, string], "correctIndex": 0-3, "explanation": string }]
+}
 
 Rules:
-- Use clear OCR — preserve every legible word in originalText.
+- OCR carefully; preserve every legible word in originalText.
 - cleanNotes must be valid markdown with # / ## headings, bullet points, bold key terms.
 - summary should be 3-6 short paragraphs of exam-revision notes.
-- Generate 8-10 flashcards covering the most important concepts.
-- Generate 6-10 multiple-choice quiz questions with exactly 4 choices each; correctIndex is 0-based.
-- title: short and descriptive. subject: 1-3 words (e.g. "Biology", "Linear Algebra").`;
+- Generate 6-10 flashcards covering the most important concepts.
+- Generate 5-8 multiple-choice quiz questions with exactly 4 choices each; correctIndex is 0-based.
+- title: short and descriptive. subject: 1-3 words (e.g. "Biology", "Linear Algebra").
+- If the document is unreadable, still return valid JSON with empty arrays and a note in summary.`;
 
-      const { experimental_output: output } = await generateText({
-        model,
-        experimental_output: Output.object({ schema: AiOutputSchema }),
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: prompt },
-              isPdf
-                ? {
-                    type: "file",
-                    data: new URL(signed.signedUrl),
-                    mediaType: "application/pdf",
-                  }
-                : { type: "image", image: new URL(signed.signedUrl) },
-            ],
-          },
-        ],
-      });
+      const messages = [
+        {
+          role: "user" as const,
+          content: [
+            { type: "text" as const, text: prompt },
+            isPdf
+              ? {
+                  type: "file" as const,
+                  data: new URL(signed.signedUrl),
+                  mediaType: "application/pdf",
+                }
+              : { type: "image" as const, image: new URL(signed.signedUrl) },
+          ],
+        },
+      ];
+
+      let output: z.infer<typeof AiOutputSchema>;
+      try {
+        const res = await generateText({
+          model,
+          experimental_output: Output.object({ schema: AiOutputSchema }),
+          messages,
+        });
+        output = res.experimental_output;
+      } catch (structuredErr) {
+        console.warn("[processNote] structured output failed, falling back to JSON parse:", structuredErr);
+        const res = await generateText({ model, messages });
+        const raw = res.text ?? "";
+        const cleaned = raw
+          .replace(/^```json\s*/im, "")
+          .replace(/^```\s*/im, "")
+          .replace(/```\s*$/im, "")
+          .trim();
+        const start = cleaned.indexOf("{");
+        const end = cleaned.lastIndexOf("}");
+        if (start === -1 || end <= start) {
+          throw new Error("AI did not return readable structured notes. Try a clearer image.");
+        }
+        const parsed = JSON.parse(cleaned.slice(start, end + 1));
+        output = AiOutputSchema.parse(parsed);
+      }
 
       const update = {
         title: output.title || row.title,
