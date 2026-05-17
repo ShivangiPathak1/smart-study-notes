@@ -9,6 +9,10 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { useEffect } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuthStore } from "@/store/auth-store";
 
 function NotFoundComponent() {
   return (
@@ -72,11 +76,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "NoteMe — AI Lecture Notes Scanner" },
+      {
+        name: "description",
+        content:
+          "Turn handwritten notes, whiteboard photos, and PDFs into clean notes, summaries, flashcards, and quizzes.",
+      },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "NoteMe — AI Lecture Notes Scanner" },
+      {
+        property: "og:description",
+        content: "Scan notes. Get summaries, flashcards, and quizzes instantly.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -110,10 +121,34 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const setSession = useAuthStore((s) => s.setSession);
+  const setInitialized = useAuthStore((s) => s.setInitialized);
+
+  useEffect(() => {
+    // Apply persisted theme as early as possible
+    const stored = localStorage.getItem("theme");
+    const prefersDark =
+      stored === "dark" ||
+      (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", prefersDark);
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+        queryClient.invalidateQueries();
+      },
+    );
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setInitialized(true);
+    });
+    return () => subscription.unsubscribe();
+  }, [queryClient, setSession, setInitialized]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
 }
