@@ -314,7 +314,14 @@ Rules:
               },
             ],
           });
-          output = normalizeAiOutput(extractJsonFromResponse(repair.text ?? ""), row);
+          try {
+            output = normalizeAiOutput(extractJsonFromResponse(repair.text ?? ""), row);
+          } catch (repairErr) {
+            console.warn("[processNote] JSON repair failed:", repairErr);
+            throw new Error(
+              "AI generated malformed structured notes. Please retry, or upload a clearer/shorter file.",
+            );
+          }
         }
       }
 
