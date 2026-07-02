@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemePicker } from "@/components/theme-picker";
 import { useAuthStore } from "@/store/auth-store";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -55,6 +56,7 @@ export function AppHeader() {
                   <Upload className="mr-2 h-4 w-4" /> Upload
                 </Button>
               </Link>
+              <ThemePicker />
               <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -94,6 +96,7 @@ export function AppHeader() {
             </>
           ) : (
             <>
+              <ThemePicker />
               <ThemeToggle />
               <Link to="/login">
                 <Button variant="ghost" size="sm">
