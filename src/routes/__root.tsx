@@ -97,6 +97,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Lora:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -131,6 +137,14 @@ function RootComponent() {
       stored === "dark" ||
       (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.classList.toggle("dark", prefersDark);
+
+    // Apply persisted color theme (palette + fonts)
+    const palette = localStorage.getItem("color-theme") || "aurora";
+    if (palette && palette !== "aurora") {
+      document.documentElement.setAttribute("data-theme", palette);
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
