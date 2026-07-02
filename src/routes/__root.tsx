@@ -161,6 +161,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <div aria-hidden className="aurora-bg" />
       <Outlet />
       <Toaster richColors position="top-right" />
     </QueryClientProvider>
