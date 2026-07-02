@@ -318,6 +318,42 @@ h1, h2, h3, h4, .font-display {
     pointer-events: none;
     z-index: -1;
   }
+  /* Full-viewport variant used as a themed app-wide backdrop */
+  .aurora-bg {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+    background:
+      radial-gradient(60vmax 45vmax at 15% 10%, color-mix(in oklch, var(--brand-1) 35%, transparent), transparent 60%),
+      radial-gradient(55vmax 45vmax at 85% 20%, color-mix(in oklch, var(--brand-3) 30%, transparent), transparent 60%),
+      radial-gradient(70vmax 55vmax at 50% 100%, color-mix(in oklch, var(--brand-2) 30%, transparent), transparent 60%),
+      var(--background);
+    transition: background 400ms ease;
+  }
+  .aurora-bg::before,
+  .aurora-bg::after {
+    content: "";
+    position: absolute;
+    width: 55vmax;
+    height: 55vmax;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: 0.35;
+    animation: aurora-float 22s ease-in-out infinite;
+  }
+  .aurora-bg::before {
+    background: radial-gradient(circle at 30% 30%, var(--brand-1), transparent 60%);
+    top: -18vmax;
+    left: -12vmax;
+  }
+  .aurora-bg::after {
+    background: radial-gradient(circle at 70% 70%, var(--brand-4, var(--brand-2)), transparent 60%);
+    bottom: -22vmax;
+    right: -12vmax;
+    animation-delay: -11s;
+  }
   .aurora::before,
   .aurora::after {
     content: "";
