@@ -4,6 +4,132 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================
+ * Theme presets
+ * Applied via `data-theme` on <html> (see ThemePicker).
+ * Each theme overrides the core tokens (background, foreground,
+ * primary, brand palette, gradients, font families) so both light
+ * and dark modes stay consistent. Font families are set on <body>
+ * via --font-sans / --font-display.
+ * ============================================ */
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Ocean — cool blues & teals */
+[data-theme="ocean"] {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --background: oklch(0.98 0.015 220);
+  --foreground: oklch(0.22 0.05 240);
+  --primary: oklch(0.6 0.16 230);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --accent: oklch(0.9 0.08 200);
+  --accent-foreground: oklch(0.25 0.1 230);
+  --ring: oklch(0.6 0.16 230);
+  --brand-1: oklch(0.65 0.17 230);
+  --brand-2: oklch(0.72 0.15 200);
+  --brand-3: oklch(0.75 0.13 180);
+  --brand-4: oklch(0.78 0.15 160);
+  --brand-5: oklch(0.7 0.15 260);
+  --gradient-hero: linear-gradient(135deg, oklch(0.62 0.18 250) 0%, oklch(0.7 0.16 220) 50%, oklch(0.78 0.14 180) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--brand-1), var(--brand-3));
+}
+[data-theme="ocean"].dark {
+  --background: oklch(0.18 0.03 240);
+  --primary: oklch(0.75 0.14 220);
+  --brand-1: oklch(0.75 0.14 220);
+  --brand-2: oklch(0.78 0.13 195);
+}
+
+/* Sunset — warm oranges & corals */
+[data-theme="sunset"] {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --background: oklch(0.99 0.015 60);
+  --foreground: oklch(0.24 0.06 30);
+  --primary: oklch(0.68 0.2 35);
+  --primary-foreground: oklch(0.99 0.01 60);
+  --accent: oklch(0.93 0.07 60);
+  --accent-foreground: oklch(0.3 0.12 30);
+  --ring: oklch(0.68 0.2 35);
+  --brand-1: oklch(0.72 0.2 40);
+  --brand-2: oklch(0.72 0.2 20);
+  --brand-3: oklch(0.8 0.17 70);
+  --brand-4: oklch(0.74 0.19 350);
+  --brand-5: oklch(0.78 0.17 55);
+  --gradient-hero: linear-gradient(135deg, oklch(0.72 0.2 20) 0%, oklch(0.76 0.2 45) 55%, oklch(0.82 0.17 75) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+}
+[data-theme="sunset"].dark {
+  --background: oklch(0.2 0.04 30);
+  --primary: oklch(0.78 0.17 40);
+  --brand-1: oklch(0.78 0.17 40);
+  --brand-2: oklch(0.78 0.17 20);
+}
+
+/* Forest — grounded greens & emeralds */
+[data-theme="forest"] {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Lora", ui-serif, Georgia, serif;
+  --background: oklch(0.98 0.015 140);
+  --foreground: oklch(0.22 0.05 150);
+  --primary: oklch(0.55 0.14 155);
+  --primary-foreground: oklch(0.99 0.01 140);
+  --accent: oklch(0.9 0.07 130);
+  --accent-foreground: oklch(0.25 0.1 150);
+  --ring: oklch(0.55 0.14 155);
+  --brand-1: oklch(0.6 0.15 155);
+  --brand-2: oklch(0.72 0.14 130);
+  --brand-3: oklch(0.78 0.13 100);
+  --brand-4: oklch(0.68 0.14 180);
+  --brand-5: oklch(0.75 0.13 80);
+  --gradient-hero: linear-gradient(135deg, oklch(0.5 0.14 160) 0%, oklch(0.65 0.14 140) 50%, oklch(0.78 0.13 90) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+}
+[data-theme="forest"].dark {
+  --background: oklch(0.18 0.03 155);
+  --primary: oklch(0.72 0.14 150);
+  --brand-1: oklch(0.72 0.14 150);
+}
+
+/* Mono — high-contrast neutral + neon accent */
+[data-theme="mono"] {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --primary: oklch(0.2 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --ring: oklch(0.7 0.24 145);
+  --brand-1: oklch(0.75 0.24 145);
+  --brand-2: oklch(0.2 0 0);
+  --brand-3: oklch(0.5 0 0);
+  --brand-4: oklch(0.75 0.24 145);
+  --brand-5: oklch(0.35 0 0);
+  --gradient-hero: linear-gradient(135deg, oklch(0.15 0 0) 0%, oklch(0.35 0 0) 60%, oklch(0.75 0.24 145) 100%);
+  --gradient-primary: linear-gradient(135deg, oklch(0.2 0 0), oklch(0.75 0.24 145));
+}
+[data-theme="mono"].dark {
+  --background: oklch(0.13 0 0);
+  --foreground: oklch(0.98 0 0);
+  --primary: oklch(0.98 0 0);
+  --primary-foreground: oklch(0.13 0 0);
+  --accent: oklch(0.22 0 0);
+  --brand-2: oklch(0.98 0 0);
+}
+
+body {
+  font-family: var(--font-sans);
+}
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
 /*
  * Design system definition.
  *
