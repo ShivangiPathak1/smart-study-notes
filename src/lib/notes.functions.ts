@@ -91,32 +91,118 @@ export const createNoteFromUpload = createServerFn({ method: "POST" })
 /* -------------- AI Processing -------------- */
 
 const AiOutputSchema = z.object({
-  title: z.string().default("Untitled Notes"),
-  subject: z.string().default("General"),
-  originalText: z.string().default(""),
-  cleanNotes: z.string().default(""),
-  summary: z.string().default(""),
+  title: z.string(),
+  subject: z.string(),
+  originalText: z.string(),
+  cleanNotes: z.string(),
+  summary: z.string(),
   flashcards: z
     .array(
       z.object({
         question: z.string(),
         answer: z.string(),
       }),
-    )
-    .max(12)
-    .default([]),
+    ),
   quiz: z
     .array(
       z.object({
         question: z.string(),
-        choices: z.array(z.string()).min(2).max(6),
-        correctIndex: z.number().int().min(0).max(5),
-        explanation: z.string().optional(),
+        choices: z.array(z.string()),
+        correctIndex: z.number(),
+        explanation: z.string(),
       }),
-    )
-    .max(10)
-    .default([]),
+    ),
 });
+
+const LooseAiOutputSchema = z
+  .object({
+    title: z.unknown().optional(),
+    subject: z.unknown().optional(),
+    originalText: z.unknown().optional(),
+    cleanNotes: z.unknown().optional(),
+    summary: z.unknown().optional(),
+    flashcards: z.unknown().optional(),
+    quiz: z.unknown().optional(),
+  })
+  .passthrough();
+
+const asRecord = (value: unknown): Record<string, unknown> | null =>
+  typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+
+const fallbackString = (value: unknown, fallback: string) =>
+  typeof value === "string" && value.trim() ? value.trim() : fallback;
+
+const normalizeAiOutput = (value: unknown, row: { title: string; subject: string | null }) => {
+  const parsed = LooseAiOutputSchema.parse(value);
+  const flashcards = (Array.isArray(parsed.flashcards) ? parsed.flashcards : [])
+    .map(asRecord)
+    .filter((card): card is Record<string, unknown> => Boolean(card))
+    .filter((card) => typeof card.question === "string" && typeof card.answer === "string")
+    .slice(0, 12)
+    .map((card) => ({
+      question: fallbackString(card.question, "Question"),
+      answer: fallbackString(card.answer, "Answer"),
+    }));
+  const quiz = (Array.isArray(parsed.quiz) ? parsed.quiz : [])
+    .map(asRecord)
+    .filter((question): question is Record<string, unknown> => Boolean(question))
+    .filter((question) => typeof question.question === "string" && Array.isArray(question.choices))
+    .slice(0, 10)
+    .map((question) => {
+      const choices = (question.choices as unknown[])
+        .filter((choice): choice is string => typeof choice === "string" && Boolean(choice.trim()))
+        .slice(0, 4);
+      const rawIndex = typeof question.correctIndex === "number" && Number.isFinite(question.correctIndex)
+        ? Math.trunc(question.correctIndex)
+        : 0;
+      return {
+        question: fallbackString(question.question, "Question"),
+        choices,
+        correctIndex: Math.min(Math.max(rawIndex, 0), Math.max(choices.length - 1, 0)),
+        explanation: fallbackString(
+          question.explanation,
+          "Review the related section in the generated notes.",
+        ),
+      };
+    })
+    .filter((question) => question.choices.length >= 2);
+
+  return {
+    title: fallbackString(parsed.title, row.title || "Untitled Notes"),
+    subject: fallbackString(parsed.subject, row.subject || "General"),
+    originalText: fallbackString(parsed.originalText, ""),
+    cleanNotes: fallbackString(
+      parsed.cleanNotes,
+      "# Notes\n\n> **Overview:** The uploaded material could not be fully structured. Try a clearer image or a shorter PDF.",
+    ),
+    summary: fallbackString(
+      parsed.summary,
+      "The uploaded material could not be fully read. Try uploading a clearer image or a shorter PDF.",
+    ),
+    flashcards,
+    quiz,
+  };
+};
+
+const extractJsonFromResponse = (response: string) => {
+  let cleaned = response
+    .replace(/```json\s*/gi, "")
+    .replace(/```/g, "")
+    .trim();
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+  if (start === -1 || end <= start) {
+    throw new Error("AI did not return structured notes. Try a clearer image.");
+  }
+  cleaned = cleaned
+    .slice(start, end + 1)
+    .replace(/,\s*}/g, "}")
+    .replace(/,\s*]/g, "]")
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+  return JSON.parse(cleaned);
+};
 
 export const processNote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -173,7 +259,7 @@ Rules:
     8. End with a "## Takeaways" section of 3–6 concise bullet points.
 - summary: 3–6 short paragraphs of exam-revision notes, plain prose (no headings).
 - Generate 6-10 flashcards covering the most important concepts.
-- Generate 5-8 multiple-choice quiz questions with exactly 4 choices each; correctIndex is 0-based.
+- Generate 5-8 multiple-choice quiz questions with exactly 4 choices each; correctIndex is 0-based and must point to one of the choices.
 - title: short and descriptive. subject: 1-3 words (e.g. "Biology", "Linear Algebra").
 - If the document is unreadable, still return valid JSON with empty arrays and a note in summary.`;
 
