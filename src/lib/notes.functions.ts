@@ -279,30 +279,43 @@ Rules:
         },
       ];
 
-      let output: z.infer<typeof AiOutputSchema>;
+      let output: ReturnType<typeof normalizeAiOutput>;
       try {
         const res = await generateText({
           model,
           experimental_output: Output.object({ schema: AiOutputSchema }),
           messages,
         });
-        output = res.experimental_output;
+        output = normalizeAiOutput(res.experimental_output, row);
       } catch (structuredErr) {
         console.warn("[processNote] structured output failed, falling back to JSON parse:", structuredErr);
-        const res = await generateText({ model, messages });
+        const res = await generateText({
+          model,
+          messages: [
+            ...messages,
+            {
+              role: "user" as const,
+              content:
+                "Return the result as one compact JSON object only. Escape all newlines and quotation marks inside string values. Do not use markdown fences.",
+            },
+          ],
+        });
         const raw = res.text ?? "";
-        const cleaned = raw
-          .replace(/^```json\s*/im, "")
-          .replace(/^```\s*/im, "")
-          .replace(/```\s*$/im, "")
-          .trim();
-        const start = cleaned.indexOf("{");
-        const end = cleaned.lastIndexOf("}");
-        if (start === -1 || end <= start) {
-          throw new Error("AI did not return readable structured notes. Try a clearer image.");
+        try {
+          output = normalizeAiOutput(extractJsonFromResponse(raw), row);
+        } catch (parseErr) {
+          console.warn("[processNote] JSON fallback parse failed:", parseErr);
+          const repair = await generateText({
+            model,
+            messages: [
+              {
+                role: "user" as const,
+                content: `Fix this malformed JSON into one valid compact JSON object matching the requested note schema. Escape every newline and quote inside string values. Return JSON only.\n\n${raw.slice(0, 24000)}`,
+              },
+            ],
+          });
+          output = normalizeAiOutput(extractJsonFromResponse(repair.text ?? ""), row);
         }
-        const parsed = JSON.parse(cleaned.slice(start, end + 1));
-        output = AiOutputSchema.parse(parsed);
       }
 
       const update = {
