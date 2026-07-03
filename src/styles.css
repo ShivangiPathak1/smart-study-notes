@@ -34,8 +34,13 @@
   --brand-3: oklch(0.75 0.13 180);
   --brand-4: oklch(0.78 0.15 160);
   --brand-5: oklch(0.7 0.15 260);
+  --brand-6: oklch(0.68 0.17 210);
   --gradient-hero: linear-gradient(135deg, oklch(0.62 0.18 250) 0%, oklch(0.7 0.16 220) 50%, oklch(0.78 0.14 180) 100%);
   --gradient-primary: linear-gradient(135deg, var(--brand-1), var(--brand-3));
+  --gradient-cool: linear-gradient(135deg, var(--brand-5), var(--brand-1));
+  --gradient-fresh: linear-gradient(135deg, var(--brand-4), var(--brand-3));
+  --gradient-warm: linear-gradient(135deg, var(--brand-2), var(--brand-6));
+  --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-1) 50%, transparent);
 }
 [data-theme="ocean"].dark {
   --background: oklch(0.18 0.03 240);
@@ -60,8 +65,13 @@
   --brand-3: oklch(0.8 0.17 70);
   --brand-4: oklch(0.74 0.19 350);
   --brand-5: oklch(0.78 0.17 55);
+  --brand-6: oklch(0.68 0.2 10);
   --gradient-hero: linear-gradient(135deg, oklch(0.72 0.2 20) 0%, oklch(0.76 0.2 45) 55%, oklch(0.82 0.17 75) 100%);
   --gradient-primary: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  --gradient-cool: linear-gradient(135deg, var(--brand-4), var(--brand-1));
+  --gradient-fresh: linear-gradient(135deg, var(--brand-3), var(--brand-5));
+  --gradient-warm: linear-gradient(135deg, var(--brand-6), var(--brand-3));
+  --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-1) 50%, transparent);
 }
 [data-theme="sunset"].dark {
   --background: oklch(0.2 0.04 30);
@@ -86,8 +96,13 @@
   --brand-3: oklch(0.78 0.13 100);
   --brand-4: oklch(0.68 0.14 180);
   --brand-5: oklch(0.75 0.13 80);
+  --brand-6: oklch(0.62 0.16 60);
   --gradient-hero: linear-gradient(135deg, oklch(0.5 0.14 160) 0%, oklch(0.65 0.14 140) 50%, oklch(0.78 0.13 90) 100%);
   --gradient-primary: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  --gradient-cool: linear-gradient(135deg, var(--brand-4), var(--brand-1));
+  --gradient-fresh: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  --gradient-warm: linear-gradient(135deg, var(--brand-5), var(--brand-6));
+  --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-1) 45%, transparent);
 }
 [data-theme="forest"].dark {
   --background: oklch(0.18 0.03 155);
@@ -111,8 +126,13 @@
   --brand-3: oklch(0.5 0 0);
   --brand-4: oklch(0.75 0.24 145);
   --brand-5: oklch(0.35 0 0);
+  --brand-6: oklch(0.6 0 0);
   --gradient-hero: linear-gradient(135deg, oklch(0.15 0 0) 0%, oklch(0.35 0 0) 60%, oklch(0.75 0.24 145) 100%);
   --gradient-primary: linear-gradient(135deg, oklch(0.2 0 0), oklch(0.75 0.24 145));
+  --gradient-cool: linear-gradient(135deg, oklch(0.25 0 0), oklch(0.7 0.24 145));
+  --gradient-fresh: linear-gradient(135deg, oklch(0.75 0.24 145), oklch(0.4 0 0));
+  --gradient-warm: linear-gradient(135deg, oklch(0.3 0 0), oklch(0.6 0 0));
+  --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-4) 45%, transparent);
 }
 [data-theme="mono"].dark {
   --background: oklch(0.13 0 0);
