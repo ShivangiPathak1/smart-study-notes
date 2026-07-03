@@ -19,7 +19,7 @@
 }
 
 /* Ocean — cool blues & teals */
-[data-theme="ocean"] {
+:root[data-theme="ocean"] {
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --background: oklch(0.98 0.015 220);
@@ -42,7 +42,7 @@
   --gradient-warm: linear-gradient(135deg, var(--brand-2), var(--brand-6));
   --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-1) 50%, transparent);
 }
-[data-theme="ocean"].dark {
+:root[data-theme="ocean"].dark {
   --background: oklch(0.18 0.03 240);
   --primary: oklch(0.75 0.14 220);
   --brand-1: oklch(0.75 0.14 220);
@@ -50,7 +50,7 @@
 }
 
 /* Sunset — warm oranges & corals */
-[data-theme="sunset"] {
+:root[data-theme="sunset"] {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --background: oklch(0.99 0.015 60);
@@ -73,7 +73,7 @@
   --gradient-warm: linear-gradient(135deg, var(--brand-6), var(--brand-3));
   --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-1) 50%, transparent);
 }
-[data-theme="sunset"].dark {
+:root[data-theme="sunset"].dark {
   --background: oklch(0.2 0.04 30);
   --primary: oklch(0.78 0.17 40);
   --brand-1: oklch(0.78 0.17 40);
@@ -81,7 +81,7 @@
 }
 
 /* Forest — grounded greens & emeralds */
-[data-theme="forest"] {
+:root[data-theme="forest"] {
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Lora", ui-serif, Georgia, serif;
   --background: oklch(0.98 0.015 140);
@@ -104,14 +104,14 @@
   --gradient-warm: linear-gradient(135deg, var(--brand-5), var(--brand-6));
   --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-1) 45%, transparent);
 }
-[data-theme="forest"].dark {
+:root[data-theme="forest"].dark {
   --background: oklch(0.18 0.03 155);
   --primary: oklch(0.72 0.14 150);
   --brand-1: oklch(0.72 0.14 150);
 }
 
 /* Mono — high-contrast neutral + neon accent */
-[data-theme="mono"] {
+:root[data-theme="mono"] {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --background: oklch(0.99 0 0);
@@ -134,7 +134,7 @@
   --gradient-warm: linear-gradient(135deg, oklch(0.3 0 0), oklch(0.6 0 0));
   --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--brand-4) 45%, transparent);
 }
-[data-theme="mono"].dark {
+:root[data-theme="mono"].dark {
   --background: oklch(0.13 0 0);
   --foreground: oklch(0.98 0 0);
   --primary: oklch(0.98 0 0);
