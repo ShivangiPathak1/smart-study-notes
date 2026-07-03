@@ -1,44 +1,79 @@
-# Note Me
+# NoteMe
 
-**Note Me** is an AI-powered web application that transforms messy, unstructured notes into clean, well-organized, and easy-to-read content. Simply paste your rough notes, and the AI restructures them into a clear, formatted layout, making them ideal for studying, documentation, or sharing.
+An AI-powered study assistant that transforms messy handwritten or typed notes into clean, structured, and study-ready material. Built with modern web technologies, NoteMe helps students organize their notes, improve revision, and save time.
 
----
+## Live Demo
+
+**Website:** https://note--me.vercel.app/
+
+## Screenshots
+
+### Landing Page
+
+![Landing Page](Subtitles/landing.png)
+
+### Dashboard
+
+![Dashboard](Subtitles/dashboard.png)
+
+### Upload Notes
+
+![Upload Notes](Subtitles/upload.png)
+
+### Login/Sign up
+
+![ Login/Sign up](Subtitles/login.png)
+
+###Vercel Deployed
+
+![Vercel Deployed](Subtitles/vercel.png)
 
 ## Features
 
-- AI-powered note structuring
-- Converts messy notes into clean, organized content
-- Automatically creates headings, sections, and bullet points
-- Fast and intuitive user experience
-- Responsive design for desktop and mobile devices
-- Modern and minimal user interface
-
----
+- Convert unstructured notes into organized content
+- AI-powered note formatting and restructuring
+- Generate concise summaries
+- Create flashcards for quick revision
+- Generate quizzes from notes
+- Secure user authentication with Supabase
+- Responsive design for desktop and mobile
 
 ## Tech Stack
 
-- React
+- React 19
 - TypeScript
-- Tailwind CSS
+- TanStack Start
 - Vite
-- AI Integration
-- Lovable
+- Tailwind CSS
+- Supabase
+- AI SDK
 - Vercel
 
----
+## Project Structure
+
+```text
+src/
+├── components/
+├── hooks/
+├── lib/
+├── routes/
+├── styles/
+├── utils/
+└── assets/
+```
 
 ## Getting Started
 
 ### Clone the repository
 
 ```bash
-git clone https://github.com/your-username/note-me.git
+git clone https://github.com/ShivangiPathak1/smart-study-notes.git
 ```
 
 ### Navigate to the project
 
 ```bash
-cd note-me
+cd smart-study-notes
 ```
 
 ### Install dependencies
@@ -53,42 +88,37 @@ npm install
 npm run dev
 ```
 
----
+## Environment Variables
 
-## Use Cases
+Configure the required environment variables before running the application.
 
-- Organize lecture notes
-- Format meeting notes
-- Clean up brainstorming ideas
-- Create structured study material
-- Improve the readability of rough drafts
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PROJECT_ID=your_project_id
+VITE_SUPABASE_PUBLISHABLE_KEY=your_publishable_key
+```
 
----
+## Deployment
 
-## Live Demo
+The application is deployed on Vercel.
 
-Coming soon...
-
----
-
-## Screenshots
-
-Screenshots will be added after deployment.
-
----
+**Live Demo:** https://note--me.vercel.app/
 
 ## Future Enhancements
 
+- OCR support for handwritten notes
 - Export notes as PDF
-- Export notes as DOCX
-- Multiple formatting styles
-- AI-generated titles
-- Note history
-- User authentication
-- Cloud synchronization
-
----
+- AI-powered study planner
+- Smart note categorization
+- Collaboration and note sharing
+- Dark/Light theme customization
 
 ## License
 
 This project is licensed under the MIT License.
+
+## Author
+
+**Shivangi Pathak**
+
+GitHub: https://github.com/ShivangiPathak1
